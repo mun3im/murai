@@ -6,9 +6,12 @@ def match_target_amplitude(sound, target_dBFS):
     change_in_dBFS = target_dBFS - sound.dBFS
     return sound.apply_gain(change_in_dBFS)
 
-species = { 8:"Asian Koel"}
-xcid = "594949"
-filename = "XC594949 - Asian Koel - Eudynamys scolopaceus.mp3"
+species = { 8:"Asian Koel", 1:"Eurasian Tree Sparrow",
+            9:"Common Iora", 5:"Yellow-vented Bulbul",
+            6:"Zebra Dove"}
+speciesid = 6
+xcid = "593996"
+filename = "XC593996 - Zebra Dove - Geopelia striata.mp3"
 
 #Convert wav to audio_segment
 #audio_segment = AudioSegment.from_wav(filename)
@@ -28,7 +31,8 @@ print(nonsilent_data)
 
 #convert ms to seconds
 print("start,Stop")
-f = open("muraitempdata.csv", "w")
+csvname = "xc" + xcid + "-detect.scv"
+f = open(csvname, "w")
 f.write("slice-file-name,xcid,start,dur,salience,speciesid,english\n")
 seq = 1
 
@@ -39,16 +43,18 @@ for chunks in nonsilent_data:
     end = chunks[1]+100
 #    print("clip={0}-{1}".format(start,end))
 
-    outputfilename = "xc" + xcid + "-" + str(start) + "-" + str(end-start) + ".wav"
+    outputfilename = "tmp/xc" + xcid + "-" + str(start) + "-" + str(end-start) + ".wav"
     print(outputfilename)
     clip = normalized_sound[start:end]
     clip.export(outputfilename, format="wav")
     s = "00"+ str(seq)
     num = s[:3]
 
-    string = xcid +"-8-" + num + ",594949," + str(start/1000) \
-            + "," + str((end-start)/1000) + ",1,8,"\
-            + species[8] + "\n"
+    string = xcid +"-8-" + num + ",594949," \
+            + str(start/1000) + "," \
+            + str((end-start)/1000) + ",1,"\
+            + str(speciesid) + ","\
+            + species[speciesid] + "\n"
     f.write(string)
     seq += 1
 
