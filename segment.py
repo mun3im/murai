@@ -66,12 +66,17 @@ for i, frame in enumerate(librosa.util.frame(y, frame_length=frame_length, hop_l
         # End of a bird sound activation
         end = i * hop_length
         segment = y[start:end]
+# start part to save as melspec
         S_segment = librosa.feature.melspectrogram(segment, sr=sr, n_fft=frame_length, hop_length=hop_length, n_mels=n_mels)
         plt.figure(figsize=(2, 2))
         librosa.display.specshow(librosa.power_to_db(S_segment, ref=np.max), y_axis='mel', fmax=sr/2, x_axis='time')
         plt.axis('off')
         plt.savefig(os.path.join(output_dir, f"segment{i}.png"), bbox_inches='tight', pad_inches=0)
         plt.close()
+# end part to save as melspec
+# start part to save as wav
+#         librosa.output.write_wav(os.path.join(output_dir, f"segment{i}.wav"), segment, sr=sr)
+# end part to save as wav
         start = None
 
         
